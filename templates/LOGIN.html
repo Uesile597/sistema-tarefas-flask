@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width" />
+  <title>Duna</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='CSS/STYLELogin.css') }}" />
+  <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/x-icon">
+</head>
+
+<body>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div id="mensagem">
+      {% for category, message in messages %}
+      <div class="flash {{ category }}">
+        {{ message }}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  {% endwith %}
+
+  <div class="caixa">
+    <h1>LOGIN</h1>
+    <form action="{{ url_for('Login') }}" id="login" method="POST">
+      <div class="dados">
+        <input type="email" id="email" name="email" placeholder="Email: teste@gmail.com" required />
+      </div>
+
+      <div class="dados">
+        <input type="password" id="senha" name="senha" placeholder="Senha" required />
+      </div>
+
+      <button type="submit" id="botao-entrar">Entrar</button>
+
+      <div class="cadastro-lembrar">
+        <a href="{{ url_for('Trocar_Senha') }}" class="esqueci-senha">Esqueci minha senha</a>
+        <a href="{{ url_for('Cadastro') }}">Cadastre-se agora</a>
+      </div>
+    </form>
+
+  </div>
+
+
+
+</body>
+
+</html>

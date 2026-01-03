@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/STYLEDashboard.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Duna</title>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/x-icon">
+</head>
+
+<body>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div id="mensagem">
+      {% for category, message in messages %}
+      <div class="flash {{ category }}">
+        {{ message }}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  {% endwith %}
+
+    <a class="home" href="{{ url_for('Inicio') }}">
+        <i class="fa-solid fa-house"></i>
+    </a>
+
+    <div class="card">
+        <h2>DashBoard do {{ usuario.nome }}</h2>
+        <div>
+            <span>Email: {{ usuario.email }}</span>
+            <span>Total de tarefas cadastradas: {{ total_tarefas }}</span>
+        </div>
+    </div>
+
+    <div class="caixa">
+
+        <div class="sub-caixa">
+            <div class="vencem-hoje">
+                <h2>Tarefas que Vencem Hoje</h2>
+
+                <div class="tarefas">
+                    {% for tarefa in vencem_hoje %}
+                    <button class="btn-info">{{ tarefa.titulo }}</button>
+
+                    <dialog class="meu-modal">
+
+                        <div class="modal-content">
+                            <h2>{{ tarefa.titulo }}</h2>
+
+                            <div class="corpo">
+                                <div class="datas">
+                                    <span>{{ tarefa.criado_em }}</span>
+
+                                    <span> - </span>
+
+                                    {% if tarefa.data_conclusao %}
+                                    <span>{{ tarefa.data_conclusao }}</span>
+                                    {% else %}
+                                    <span>Não Concluída</span>
+                                    {% endif %}
+                                </div>
+
+                                <div class="descricao">
+                                    {% if tarefa.descricao %}
+                                    <p>{{ tarefa.descricao }}</p>
+                                    {% else %}
+                                    <p>Sem Descrição</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </dialog>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="ja-vencidas">
+                <h2>Tarefas Vencidas</h2>
+
+                <div class="tarefas">
+                    {% for tarefa in tarefas_vencidas %}
+                    <button class="btn-info">{{ tarefa.titulo }}</button>
+                    <dialog class="meu-modal">
+
+                        <div class="modal-content">
+                            <h2>{{ tarefa.titulo }}</h2>
+
+                            <div class="corpo">
+                                <div class="datas">
+                                    <span>{{ tarefa.criado_em }}</span>
+
+                                    <span> - </span>
+
+                                    {% if tarefa.data_conclusao %}
+                                    <span>{{ tarefa.data_conclusao }}</span>
+                                    {% else %}
+                                    <span>Não Concluída</span>
+                                    {% endif %}
+                                </div>
+
+                                <div class="descricao">
+                                    {% if tarefa.descricao %}
+                                    <p>{{ tarefa.descricao }}</p>
+                                    {% else %}
+                                    <p>Sem Descrição</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </dialog>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="graficos">
+            <div class="grafico-pizza">
+                <h2>Tarefa por Status</h2>
+                <canvas id="graficoStatus"></canvas>
+            </div>
+
+            <div class="grafico-barras">
+                <h2>Criadas X Concluídas</h2>
+                <canvas id="graficoBarras"></canvas>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script id="dados-pizza" type="application/json">
+{
+    "labels": {{ labels | tojson }},
+    "valores": {{ valores | tojson }}
+}
+</script>
+
+<script id="dados-barras" type="application/json">
+{
+    "labels": ["Criadas", "Concluídas"],
+    "valores": [{{ tarefas_criadas }}, {{ tarefas_concluidas }}]
+}
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='JS/SCRIPTDashboard.js') }}"></script>
+
+</html>

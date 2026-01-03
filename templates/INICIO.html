@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duna</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/STYLEInicio.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/x-icon">
+</head>
+
+<body>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div id="mensagem">
+      {% for category, message in messages %}
+      <div class="flash {{ category }}">
+        {{ message }}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  {% endwith %}
+    
+    <div class="topo">
+        <h1>TAREFAS</h1>
+
+        <button class="botao-menu">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <nav class="menu-lateral">
+            <ul>
+                <li>
+                    <a href="{{ url_for('Adicionar_Tarefa') }}">
+                        <i class="fa-solid fa-plus"></i>
+                        Adicionar Tarefas
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ url_for('EditarTarefa') }}">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                        Editar Tarefas
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ url_for('ListarTarefas') }}">
+                        <i class="fa-solid fa-delete-left"></i>
+                        Excluir Tarefas
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ url_for('Dashboard') }}">
+                        <i class="fa-solid fa-chart-line"></i>
+                        Dashboard
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <div class="background"></div>
+
+    <div class="caixa1">
+        <div class="linhatopo"></div>
+    </div>
+
+    <main class="conteudo">
+        <ul>
+
+            {% for tarefa in tarefas %}
+            <li>
+                <h2 class="titulo">{{ tarefa.titulo }}</h2>
+
+                <div class="subtitulo">
+                    <span class="data">
+                        {{ tarefa.criado_em.strftime('%d/%m/%Y') }}
+                    </span>
+
+                    <span class="data"> - </span>
+
+                    {% if tarefa.data_conclusao %}
+                    <span class="data">
+                        {{ tarefa.data_conclusao.strftime('%d/%m/%Y') }}
+                    </span>
+                    {% else %}
+                    <span class="data">
+                        Não Concluída
+                    </span>
+                    {% endif %}
+
+                    <span class="data"> - </span>
+
+                    <span class="status {{ status_map[tarefa.status].classe }}">
+                        {{ status_map[tarefa.status].label }}
+                    </span>
+                </div>
+
+                {% if tarefa.descricao %}
+                    <div class="tarefa">
+                        <p class="descricao">{{ tarefa.descricao }}</p>
+                    </div>
+
+                {% else %}
+                    <div class="tarefa">
+                        <p class="descricao">Sem Descrição</p>
+                    </div>
+                
+                {% endif %}
+            </li>
+            {% endfor %}
+
+        </ul>
+    </main>
+</body>
+
+<script src="{{ url_for('static', filename='JS/SCRIPTInicio.js') }}"></script>
+
+</html>

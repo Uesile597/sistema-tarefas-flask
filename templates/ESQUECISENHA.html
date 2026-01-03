@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duna</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='CSS/STYLEEsquecisenha.css') }}" />
+  <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/x-icon">
+</head>
+<body>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div id="mensagem">
+      {% for category, message in messages %}
+      <div class="flash {{ category }}">
+        {{ message }}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  {% endwith %}
+  
+  <div class="caixa">
+    <h1>Trocar Senha</h1>
+    <form action="{{ url_for('Trocar_Senha') }}" id="Trocar-Senha" method="POST">
+      <div class="dados">
+        <input type="email" id="email" name="email" placeholder="Email: teste@gmail.com" required />
+      </div>
+
+      <div class="dados">
+        <input type="password" id="senha" name="nova_senha" placeholder="Nova Senha" required />
+      </div>
+
+      <div class="dados">
+        <input type="password" id="senha" name="confirmar_nova_senha" placeholder="Confirme a Nova Senha" required />
+      </div>
+
+      <button type="submit" id="botao-entrar">Cadastrar Nova Senha</button>
+    </form>
+
+  </div>
+
+
+</body>
+</html>

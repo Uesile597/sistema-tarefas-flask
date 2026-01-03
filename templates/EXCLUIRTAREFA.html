@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duna</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/STYLEExcluirtarefa.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/x-icon">
+</head>
+
+<body>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div id="mensagem">
+      {% for category, message in messages %}
+      <div class="flash {{ category }}">
+        {{ message }}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  {% endwith %}
+
+    <a class="home" href="{{ url_for('Inicio') }}">
+        <i class="fa-solid fa-house"></i>
+    </a>
+
+    <div class="caixa">
+        <h1>Editar Tarefa</h1>
+
+        <div class="nome-pesquisar">
+            <form action="{{ url_for('ListarTarefas') }}" method="get" id="busca">
+                    <input type="text" id="titulo" name="titulo_busca" placeholder="Qual o título da tarefa desejada ?">
+
+                    <button class="pesquisar" type="submit">Pesquisar</button>
+            </form>
+            <button class="excluir" type="button" id="excluir">Excluir</button>
+        </div>
+
+        <div class="resultado">
+            <ul>
+                {% for tarefa in tarefas %}
+
+                <li>
+                    <input type="checkbox" id="tarefa-{{ tarefa.id_tarefa }}" name="tarefas_selecionadas"
+                        value="{{ tarefa.id_tarefa }}" hidden>
+
+                    <label for="tarefa-{{ tarefa.id_tarefa }}" class="selecionar">
+
+                        <div class="titulo-id">
+                            <h2 class="titulo">{{ tarefa.titulo }}</h2>
+                            <h3 class="id">{{ tarefa.id_tarefa }}</h3>
+                        </div>
+
+                        <div class="dados">
+                            <div class="data-status">
+                                <div class="data">
+                                    <span class="data">
+                                        {{ tarefa.criado_em.strftime('%d/%m/%Y') }}
+                                    </span>
+
+                                    <span class="data"> - </span>
+
+                                    {% if tarefa.data_conclusao %}
+                                    <span class="data">
+                                        {{ tarefa.data_conclusao.strftime('%d/%m/%Y') }}
+                                    </span>
+                                    {% else %}
+                                    <span class="data">
+                                        Não Concluída
+                                    </span>
+                                    {% endif %}
+                                </div>
+
+                                <span class="status {{ status_map[tarefa.status].classe }}">
+                                    {{ status_map[tarefa.status].label }}
+                                </span>
+                            </div>
+
+                            {% if tarefa.descricao %}
+                            <div class="tarefa">
+                                <p class="descricao">{{ tarefa.descricao }}</p>
+                            </div>
+
+                            {% else %}
+                            <div class="tarefa">
+                                <p class="descricao">Sem Descrição</p>
+                            </div>
+
+                            {% endif %}
+
+                        </div>
+
+                    </label>
+                </li>
+
+                {% endfor %}
+            </ul>
+        </div>
+
+    </div>
+</body>
+
+<script src="{{ url_for('static', filename='JS/SCRIPTExcluirtarefa.js') }}"></script>
+
+</html>

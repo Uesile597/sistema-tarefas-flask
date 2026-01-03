@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duna</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/STYLEEditartarefa.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/x-icon">
+</head>
+
+<body>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div id="mensagem">
+      {% for category, message in messages %}
+      <div class="flash {{ category }}">
+        {{ message }}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  {% endwith %}
+
+    <a class="home" href="{{ url_for('Inicio') }}">
+        <i class="fa-solid fa-house"></i>
+    </a>
+
+    <div class="caixa">
+        <h1>Editar Tarefa</h1>
+
+        <form action="{{ url_for('EditarTarefa') }}" method="get" id="busca">
+
+            <div class="nome-pesquisar">
+                <input type="text" id="titulo" name="titulo_busca" placeholder="Qual o título da tarefa desejada ?">
+
+                <button class="pesquisar" type="submit">Pesquisar</button>
+
+            </div>
+
+        </form>
+
+
+        <div class="resultado">
+            <ul>
+                {% for tarefa in tarefas %}
+
+                <li>
+                    <form action="{{ url_for('EditarTarefa') }}" method="post" id="esitar">
+                        <div class="titulo-id">
+                            <input class="titulo" type="text" name="titulo" value="{{ tarefa.titulo }}">
+                            <input class="id" type="number" name="id" value="{{ tarefa.id_tarefa }}" readonly>
+                        </div>
+
+                        <div class="dados">
+                            <div class="data-status">
+                                <div class="data">
+                                    {% if tarefa.data_conclusao %}
+                                    <input type="date" name="data_conclusao" value="{{ tarefa.data_conclusao }}">
+                                    {% else %}
+                                    <input type="date" name="data_conclusao">
+                                    {% endif %}
+                                </div>
+
+                                <input class="status {{ status_map[tarefa.status].classe }}" type="text" name="status"
+                                    value="{{ status_map[tarefa.status].label }}">
+                            </div>
+
+                            {% if tarefa.descricao %}
+                            <textarea class="descricao" rows="5" cols="40"
+                                name="descricao" value="{{ tarefa.descricao }}"></textarea>
+
+                            {% else %}
+                            <textarea class="descricao" rows="5" cols="40"
+                                name="descricao" placeholder="Descrição"></textarea>
+
+                            {% endif %}
+                            
+                        </div>
+
+                        <button type="submit" class="Editar">Editar</button>
+                    </form>
+                </li>
+
+                {% endfor %}
+            </ul>
+        </div>
+
+    </div>
+</body>
+
+</html>
